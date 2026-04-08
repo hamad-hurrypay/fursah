@@ -15,6 +15,84 @@ const client = createClient({ url: "file:data.db" });
 
 export const db = drizzle(client);
 
+export async function initializeDatabase(): Promise<void> {
+  await client.executeMultiple(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL,
+      email TEXT NOT NULL,
+      full_name TEXT NOT NULL,
+      phone TEXT,
+      role TEXT NOT NULL DEFAULT 'beneficiary',
+      current_stage INTEGER NOT NULL DEFAULT 1,
+      completed_stages TEXT NOT NULL DEFAULT '[]',
+      skills TEXT NOT NULL DEFAULT '[]',
+      aptitude_result TEXT,
+      cv_data TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS courses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      provider TEXT NOT NULL,
+      duration TEXT NOT NULL,
+      category TEXT NOT NULL,
+      level TEXT NOT NULL DEFAULT 'مبتدئ',
+      stage_required INTEGER NOT NULL DEFAULT 3
+    );
+
+    CREATE TABLE IF NOT EXISTS user_courses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      course_id INTEGER NOT NULL,
+      status TEXT NOT NULL DEFAULT 'not_started',
+      progress INTEGER NOT NULL DEFAULT 0
+    );
+
+    CREATE TABLE IF NOT EXISTS certificates (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      issuer TEXT NOT NULL,
+      date_obtained TEXT NOT NULL,
+      category TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS volunteer_opps (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      organization TEXT NOT NULL,
+      description TEXT NOT NULL,
+      location TEXT NOT NULL,
+      hours INTEGER NOT NULL,
+      category TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS jobs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      company TEXT NOT NULL,
+      description TEXT NOT NULL,
+      location TEXT NOT NULL,
+      type TEXT NOT NULL,
+      salary_range TEXT,
+      category TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS training_programs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      provider TEXT NOT NULL,
+      description TEXT NOT NULL,
+      type TEXT NOT NULL,
+      duration TEXT NOT NULL,
+      linked_program TEXT
+    );
+  `);
+}
+
 export interface IStorage {
   // Users
   getUser(id: number): Promise<User | undefined>;
