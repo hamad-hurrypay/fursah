@@ -22,7 +22,7 @@ export default function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
-    { label: "الرئيسية", href: "/" },
+    { label: "ابدأ رحلتك", href: "/auth" },
     { label: "من نحن", href: "/#about" },
     { label: "اختر مسارك", href: "/tracks" },
     { label: "مرصد التوظيف", href: "/observatory" },
@@ -119,7 +119,7 @@ export default function LandingPage() {
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A44B]/15 border border-[#C9A44B]/30 mb-6">
               <Star className="w-3.5 h-3.5 text-[#C9A44B]" />
-              <span className="text-[#C9A44B] text-sm font-medium">منصة التطوير المهني الشاملة</span>
+              <span className="text-[#C9A44B] text-sm font-medium">رحلة مهنية من 9 مراحل</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
               فرصتي
@@ -128,14 +128,22 @@ export default function LandingPage() {
               رحلتك المهنية تبدأ هنا
             </p>
             <p className="text-base text-white/50 mb-8 max-w-xl mx-auto">
-              من اختبار الميول إلى الوظيفة المثالية — ٩ مراحل متكاملة تقودك نحو مستقبلك المهني
+              من الميول إلى الوظيفة — 9 مراحل تبني مسارك المهني
             </p>
-            <Link href="/auth">
-              <Button size="lg" className="bg-[#C9A44B] hover:bg-[#b8933a] text-[#1A2533] font-bold text-base px-8 h-12" data-testid="btn-hero-cta">
-                ابدأ رحلتك الآن
-                <ArrowLeft className="w-4 h-4 mr-2" />
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/auth">
+                <Button size="lg" className="bg-[#C9A44B] hover:bg-[#b8933a] text-[#1A2533] font-bold text-base px-8 h-12 w-full sm:w-auto" data-testid="btn-hero-cta">
+                  ابدأ رحلتك الآن
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                </Button>
+              </Link>
+              <Link href="/auth">
+                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold text-base px-8 h-12 w-full sm:w-auto">
+                  للمؤسسات
+                  <Building2 className="w-4 h-4 mr-2" />
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
         <div className="flex justify-center pb-6">
@@ -225,30 +233,44 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Journey Stages */}
-      <section className="py-16 bg-muted/50">
+      {/* Journey Stages - Stepper Visual */}
+      <section className="py-20 bg-muted/30">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
-            <h2 className="text-xl font-bold text-foreground mb-2">رحلتك في ٩ مراحل</h2>
-            <p className="text-muted-foreground">خطوات واضحة نحو مستقبلك المهني</p>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-14">
+            <h2 className="text-2xl font-bold text-foreground mb-3">رحلتك نحو المستقبل</h2>
+            <p className="text-muted-foreground">٩ مراحل متتالية تبني من خلالها هويتك المهنية</p>
           </motion.div>
-          <div className="grid grid-cols-3 md:grid-cols-9 gap-4">
-            {STAGES.map((stage, i) => {
-              const Icon = iconMap[stage.icon];
-              return (
-                <motion.div
-                  key={stage.id}
-                  initial="hidden" whileInView="visible" viewport={{ once: true }}
-                  variants={{ ...fadeUp, visible: { ...fadeUp.visible, transition: { duration: 0.4, delay: i * 0.05 } } }}
-                  className="flex flex-col items-center text-center"
-                >
-                  <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center mb-2">
-                    <Icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="text-xs font-medium text-foreground leading-tight">{stage.name}</span>
-                </motion.div>
-              );
-            })}
+          
+          <div className="relative">
+            {/* Background Line (Desktop) */}
+            <div className="hidden lg:block absolute top-[2.75rem] left-0 right-0 h-0.5 bg-border z-0" />
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 gap-8 lg:gap-2 relative z-10">
+              {STAGES.map((stage, i) => {
+                const Icon = iconMap[stage.icon];
+                return (
+                  <motion.div
+                    key={stage.id}
+                    initial="hidden" whileInView="visible" viewport={{ once: true }}
+                    variants={{ ...fadeUp, visible: { ...fadeUp.visible, transition: { duration: 0.4, delay: i * 0.1 } } }}
+                    className="flex lg:flex-col items-center gap-4 lg:gap-2 text-right lg:text-center group"
+                  >
+                    <div className="relative">
+                      <div className="w-14 h-14 rounded-full bg-white border-4 border-muted group-hover:border-primary/40 flex items-center justify-center transition-all duration-300 shadow-sm relative z-10">
+                        <Icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#1A2533] text-[#C9A44B] text-[10px] font-bold flex items-center justify-center border border-[#C9A44B]/30">
+                        {i + 1}
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <span className="text-xs uppercase font-bold text-primary/60 mb-1 block lg:hidden">المرحلة {i + 1}</span>
+                      <span className="text-sm font-bold text-foreground leading-tight block">{stage.name}</span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -272,15 +294,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Partners */}
+      {/* Supporting Entities Section */}
       <section className="py-16 bg-background">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-            <h2 className="text-xl font-bold text-foreground mb-6">شركاؤنا في النجاح</h2>
+            <h2 className="text-xl font-bold text-foreground mb-6">الجهات الداعمة للتدريب في المملكة</h2>
             <div className="flex flex-wrap justify-center gap-8">
-              {["تمهير", "هدف", "مسك", "مهارات"].map((p) => (
-                <div key={p} className="px-6 py-3 rounded-lg bg-muted border border-border" data-testid={`partner-${p}`}>
-                  <span className="text-lg font-bold text-muted-foreground">{p}</span>
+              {[
+                { name: "تمهير", icon: Award },
+                { name: "هدف", icon: Target },
+                { name: "تكامل", icon: Building2 },
+                { name: "مسك", icon: Heart },
+                { name: "مهارات", icon: Zap }
+              ].map((p) => (
+                <div key={p.name} className="flex flex-col items-center gap-3 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all cursor-default" data-testid={`partner-${p.name}`}>
+                  <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center border border-border">
+                    <p.icon className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <span className="text-base font-bold text-foreground">{p.name}</span>
                 </div>
               ))}
             </div>
@@ -352,9 +383,9 @@ export default function LandingPage() {
                 <div className="flex-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C9A44B]/15 border border-[#C9A44B]/30 mb-4">
                     <BarChart3 className="w-3.5 h-3.5 text-[#C9A44B]" />
-                    <span className="text-[#C9A44B] text-xs font-semibold">مرصد التوظيف الوطني</span>
+                    <span className="text-[#C9A44B] text-xs font-semibold">مرصد التوظيف</span>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-white mb-5">المرصد الوطني للتوظيف</h2>
+                  <h2 className="text-2xl md:text-3xl font-black text-white mb-5">مرصد التوظيف</h2>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-[#C9A44B]/15 flex items-center justify-center flex-shrink-0">
